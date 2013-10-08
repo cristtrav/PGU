@@ -7,7 +7,7 @@
             <minimum-ant-version>1.6.5</minimum-ant-version>
             <included-library dirs="200">reference.libEntidadesPGU.jar</included-library>
             <source-roots>
-                <root id="src.dir"/>
+                <root id="src.dir" name="src/java"/>
             </source-roots>
             <test-roots>
                 <root id="test.src.dir"/>

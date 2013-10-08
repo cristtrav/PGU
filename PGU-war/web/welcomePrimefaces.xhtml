@@ -39,7 +39,14 @@
                 </p:layoutUnit>
 
                 <p:layoutUnit position="center">
-                    Welcome to PrimeFaces
+                    <p:dataTable value="#{depManBean.deps}" var="d">
+                        <p:column headerText="Codigo">
+                            #{d.idDepartamento}
+                        </p:column>
+                        <p:column headerText="Nombre">
+                            #{d.nombre}
+                        </p:column>
+                    </p:dataTable>
                 </p:layoutUnit>
 
             </p:layout>
