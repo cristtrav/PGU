@@ -10,7 +10,7 @@
                     <file>${reference.PGU-ejb.dist}</file>
                 </library>
                 <library dirs="200">
-                    <file>${libs.PrimeFaces_3.5.classpath}</file>
+                    <file>${libs.primefaces.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

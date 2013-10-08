@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1" xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+  <persistence-unit name="PGU-ejbPU" transaction-type="JTA">
+    <jta-data-source>jdbc/pgu</jta-data-source>
+    <class>com.pgu.entidades.Alumno</class>
+    <class>com.pgu.entidades.Carrera</class>
+    <class>com.pgu.entidades.Ciudad</class>
+    <class>com.pgu.entidades.Departamento</class>
+    <class>com.pgu.entidades.DetallePago</class>
+    <class>com.pgu.entidades.DetalleTasa</class>
+    <class>com.pgu.entidades.Docente</class>
+    <class>com.pgu.entidades.Examen</class>
+    <class>com.pgu.entidades.Facultad</class>
+    <class>com.pgu.entidades.Materia</class>
+    <class>com.pgu.entidades.Matricula</class>
+    <class>com.pgu.entidades.Pago</class>
+    <class>com.pgu.entidades.Rol</class>
+    <class>com.pgu.entidades.Sede</class>
+    <class>com.pgu.entidades.Semestre</class>
+    <class>com.pgu.entidades.Tasa</class>
+    <class>com.pgu.entidades.Usuario</class>
+    <exclude-unlisted-classes>true</exclude-unlisted-classes>
+    <properties/>
+  </persistence-unit>
+</persistence>
