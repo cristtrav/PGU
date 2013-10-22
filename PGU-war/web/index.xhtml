@@ -1,14 +1,33 @@
 <?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:h="http://java.sun.com/jsf/html">
-    <h:head>
-        <title>Facelet Title</title>
-    </h:head>
-    <h:body>
-        Hello from Facelets
-        <br />
-        <h:link outcome="welcomePrimefaces" value="Primefaces welcome page" />
-    </h:body>
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    
+    <f:view contentType="text/html">
+        <h:head>
+            <link href="recursos/estilo.css" rel="stylesheet" type="text/css" />
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>Plataforma de Gestión Universitaria</title>
+        </h:head>
+        <h:body>
+            <p:layout fullPage="true">
+                <p:layoutUnit position="west" minSize="250">
+
+                </p:layoutUnit>
+                <p:layoutUnit position="center">
+                    
+                </p:layoutUnit>
+                <p:layoutUnit position="north" size="70" style="border-style: hidden">
+                    <h:panelGrid style="width: 100%; text-align: center">
+                        <h3>Plataforma de Gestión Universitaria</h3>
+                    </h:panelGrid>
+                </p:layoutUnit>
+            </p:layout>
+        </h:body>
+    </f:view>
+    
 </html>
 
