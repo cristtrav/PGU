@@ -10,11 +10,11 @@
                     <file>${reference.PGU-ejb.dist}</file>
                 </library>
                 <library dirs="200">
-                    <file>${libs.primefaces.classpath}</file>
+                    <file>${reference.libEntidadesPGU.jar}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
                 <library dirs="200">
-                    <file>${reference.libEntidadesPGU.jar}</file>
+                    <file>${libs.PrimeFaces_4.0.3.classpath}</file>
                     <path-in-war>WEB-INF/lib</path-in-war>
                 </library>
             </web-module-libraries>

@@ -1,0 +1,168 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../plantillas/plantillaPrincipal.xhtml">
+
+            <ui:define name="tituloPagina">
+                PGU - Alumnos
+            </ui:define>
+
+            <ui:define name="content">
+                    
+                <p:layout>
+                    <p:layoutUnit position="east" size="210" resizable="true" minSize="170" maxSize="400">
+                        <p:accordionPanel>
+                            <p:tab title="Acciones">
+                                <h:form>
+                                    <h:panelGrid columns="1" style="width: 98%">
+                                        <p:commandButton icon="ui-icon-plus" value="Agregar" oncomplete="dlgAgreAlumno.show();" actionListener="#{alumnoManBean.limpiarFormAlta()}" update=":formAltaAlumno" style="width: 100%" />
+                                        <p:commandButton icon="ui-icon-trash" value="Eliminar" actionListener="#{alumnoManBean.confElim()}" update=":formAlumnos:mens" style="width: 100%" />
+                                        <p:separator/>
+                                        <p:commandButton value="Mostrar Todo" title="Mostrar todos los registros" actionListener="#{alumnoManBean.cargarAlumnos()}" partialSubmit="true" process="@this" update=":formAlumnos:tablaAlumnos" style="width: 100%"/>
+                                        <p:commandButton value="Recargar" icon="ui-icon-refresh" title="Recargar Tabla" actionListener="#{alumnoManBean.refrescarTabla()}" update=":formAlumnos:tablaAlumnos" style="width: 100%" />
+                                    </h:panelGrid>
+                                </h:form>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center" style="border-style: hidden" header="Alumnos" >
+                        <!--Inicio Dialogos-->
+                        <p:dialog widgetVar="dlgAgreAlumno" modal="true" header="Agregar alumnos" appendTo="@(body)" position="center center">
+                            <h:form id="formAltaAlumno">
+                                <p:messages id="msgAltaAlumno" autoUpdate="false"  closable="true"/>
+                                <h:panelGrid columns="3">
+                                            <h:outputText value="Nombres: " />
+                                            <p:inputText id="nombres" value="#{alumnoManBean.tmpAlu.nombres}" required="true" />
+                                            <p:message for="nombres" showDetail="false" showSummary="false"/>
+                                        
+                                            <h:outputText value="Apellidos: " />
+                                            <p:inputText id="apellidos" value="#{alumnoManBean.tmpAlu.apellidos}" required="true" />
+                                            <p:message for="apellidos" showDetail="false" showSummary="false"/>
+                                        
+                                            <h:outputText value="Cédula: " />
+                                            <p:inputText id="cedula" required="true" value="#{alumnoManBean.tmpAlu.ci}" >
+                                                <f:convertNumber type="number" integerOnly="true" />
+                                                <f:validateLongRange minimum="1" />
+                                            </p:inputText>
+                                            <p:message for="cedula" showDetail="false" showSummary="false" />
+                                            
+                                            <h:outputText value="Fecha Nacimiento: " />
+                                            <p:calendar id="fechaNacimiento" value="#{alumnoManBean.tmpAlu.nacimiento}" navigator="true"/>
+                                            <p:message for="fechaNacimiento" showDetail="false" showSummary="false" />
+                                    
+                                            <h:outputText value="Teléfono: "/>
+                                            <p:inputText id="telefono" value="#{alumnoManBean.tmpAlu.telefono}"  />
+                                            <p:message for="telefono" showDetail="false" showSummary="false" />
+                                            
+                                            <h:outputText value="Celular: "/>
+                                            <p:inputText id="celular" value="#{alumnoManBean.tmpAlu.celular}" />
+                                            <p:message for="celular" showDetail="false" showSummary="false"/>
+                                            
+                                            <h:outputText value="Correo: "/>
+                                            <p:inputText id="correo" value="#{alumnoManBean.tmpAlu.correo}" />
+                                            <p:message for="correo" showDetail="false" showSummary="false"/>
+                                            
+                                            <h:outputText value="Ciudad: "/>
+                                            <p:selectOneMenu id="ciudad" value="#{alumnoManBean.tmpAlu.idCiudad}" converter="convCiudad">
+                                                <f:selectItems value="#{datosTablasManBean.listaCiudades}" var="ciualta" itemLabel="#{ciualta.nombre}" />
+                                            </p:selectOneMenu>
+                                    
+                                </h:panelGrid>                                
+                                <p:commandButton value="Agregar" actionListener="#{alumnoManBean.guardarAlumno()}" icon="ui-icon-plus" update="@form" />
+                            </h:form>
+                        </p:dialog>
+                        
+                        <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" header="Eliminar Alumnos" modal="true">
+                            <h:form>
+                                <h:outputText value="¿Desea eliminar los elementos seleccionados?" />
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Aceptar" actionListener="#{alumnoManBean.eliminarAlumnos()}" update=":formAlumnos" oncomplete="dlgConfirmElim.hide();" />
+                                    <p:commandButton value="Cancelar" type="button" onclick="dlgConfirmElim.hide();" />
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                        
+                        <p:dialog widgetVar="dlgViewAlumno" header="Detalles de alumno" modal="true" appendTo="@(body)">
+                            <h:form id="formModifAlu">
+                                <p:messages id="msgModifAlu"  autoUpdate="false" closable="true" />
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Código: " />
+                                    <p:inputText value="#{alumnoManBean.selSimpAlu.idAlumno}" readonly="true"/>
+                                    <h:outputText value="Nombres: "/>
+                                    <p:inputText value="#{alumnoManBean.selSimpAlu.nombres}" required="true" />
+                                    <h:outputText value="Apellidos: "/>
+                                    <p:inputText value="#{alumnoManBean.selSimpAlu.apellidos}" required="true" />
+                                    <h:outputText value="Cédula: " />
+                                    <p:inputText value="#{alumnoManBean.selSimpAlu.ci}" required="true" >
+                                        <f:convertNumber integerOnly="true" />
+                                        <f:validateLongRange minimum="1"/>
+                                    </p:inputText>
+                                    <h:outputText value="Fecha de Nacimiento:" /><p:calendar value="#{alumnoManBean.selSimpAlu.nacimiento}" navigator="true" yearRange="c-40:c" />
+                                    <h:outputText value="Teléfono: " /><p:inputText value="#{alumnoManBean.selSimpAlu.telefono}" />
+                                    <h:outputText value="Celular: " /><p:inputText value="#{alumnoManBean.selSimpAlu.celular}" />
+                                    <h:outputText value="Ciudad: " />
+                                    <p:selectOneMenu value="#{alumnoManBean.selSimpAlu.idCiudad}" converter="convCiudad">
+                                        <f:selectItems value="#{datosTablasManBean.listaCiudades}" var="ciued" itemLabel="#{ciued.nombre} - #{ciued.idDepartamento.nombre}" />
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Guardar" title="Guarda los cambios efectuados" actionListener="#{alumnoManBean.modifAlumno()}" update="formModifAlu"/>
+                                    <p:commandButton value="Cerrar" title="Cierra el dialogo" type="button" onclick="dlgViewAlumno.hide();" />
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                        
+                        <!--Fin Dialogos-->
+                        
+                        <h:form id="formAlumnos">
+                            <p:growl id="mens" autoUpdate="false" sticky="false" />
+                            <p:dataTable id="tablaAlumnos" rowKey="#{alu.idAlumno}" value="#{alumnoManBean.lstAlumnos}" var="alu" selection="#{alumnoManBean.selAlumnos}" stickyHeader="true" style="margin-top: -3px" >
+                                
+                                <p:ajax event="rowSelect"  />
+                                <p:ajax event="rowUnselect" />
+                                <p:ajax event="rowSelectCheckbox" />
+                                <p:ajax event="rowUnselectCheckbox" />
+                                <p:ajax event="toggleSelect" />
+                                <p:ajax event="rowDblselect" listener="#{alumnoManBean.llamarDlgDetalles()}" update=":formAlumnos:mens" />
+                                
+                                
+                                    <p:column selectionMode="multiple" style="width: 20px" />
+                                    
+                                    <p:column headerText="Cód" style="width: 45px">
+                                        #{alu.idAlumno}
+                                    </p:column>
+                                    <p:column headerText="Nombres">
+                                        <h:outputText value="#{alu.nombres}" />
+                                    </p:column>
+                                    
+                                    <p:column headerText="Apellidos">
+                                        <h:outputText value="#{alu.apellidos}"/>
+                                    </p:column>
+                                    
+                                    <p:column headerText="Cédula">
+                                        <h:outputText value="#{alu.ci}">
+                                            <f:convertNumber pattern="###,###,###,###" />
+                                        </h:outputText>
+                                    </p:column>
+                                    
+                                </p:dataTable>
+                            </h:form>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="south" size="120" header="Filtro" collapsible="true" collapsed="true">
+                        
+                    </p:layoutUnit>
+                </p:layout>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
