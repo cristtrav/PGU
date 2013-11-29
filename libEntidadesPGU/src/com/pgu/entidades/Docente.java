@@ -30,6 +30,9 @@ import javax.persistence.TemporalType;
 @NamedQueries({
     @NamedQuery(name = "Docente.findAll", query = "SELECT d FROM Docente d")})
 public class Docente implements Serializable {
+    @Basic(optional = false)
+    @Column(name = "ci")
+    private int ci;
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,9 +45,6 @@ public class Docente implements Serializable {
     @Basic(optional = false)
     @Column(name = "apellidos")
     private String apellidos;
-    @Basic(optional = false)
-    @Column(name = "ci")
-    private String ci;
     @Column(name = "nacimiento")
     @Temporal(TemporalType.DATE)
     private Date nacimiento;
@@ -64,7 +64,7 @@ public class Docente implements Serializable {
         this.idDocente = idDocente;
     }
 
-    public Docente(Integer idDocente, String nombres, String apellidos, String ci) {
+    public Docente(Integer idDocente, String nombres, String apellidos, Integer ci) {
         this.idDocente = idDocente;
         this.nombres = nombres;
         this.apellidos = apellidos;
@@ -93,14 +93,6 @@ public class Docente implements Serializable {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
-    }
-
-    public String getCi() {
-        return ci;
-    }
-
-    public void setCi(String ci) {
-        this.ci = ci;
     }
 
     public Date getNacimiento() {
@@ -166,6 +158,14 @@ public class Docente implements Serializable {
     @Override
     public String toString() {
         return "com.pgu.entidades.Docente[ idDocente=" + idDocente + " ]";
+    }
+
+    public int getCi() {
+        return ci;
+    }
+
+    public void setCi(int ci) {
+        this.ci = ci;
     }
     
 }
