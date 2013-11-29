@@ -31,6 +31,7 @@
                                     <p:panelMenu style=" margin-top: 10px">
                                         <p:submenu label="Académico">
                                             <p:menuitem value="Alumnos" url="/faces/academico/alumnos.xhtml" />
+                                            <p:menuitem value="Docentes" url="/faces/academico/docentes.xhtml" />
                                         </p:submenu>
                                     </p:panelMenu>
                                 </h:form>
@@ -44,8 +45,9 @@
 
                 <p:layoutUnit position="center">
                     <ui:insert name="content">Content</ui:insert>
-                    <ui:include src="/incrustables/ajaxCargando.xhtml" />
+                    
                 </p:layoutUnit>
             </p:layout>
+            <ui:include src="/incrustables/ajaxCargando.xhtml" />
         </h:body>    
 </html>

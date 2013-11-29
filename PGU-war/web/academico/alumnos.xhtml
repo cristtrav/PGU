@@ -55,7 +55,7 @@
                                             <p:message for="cedula" showDetail="false" showSummary="false" />
                                             
                                             <h:outputText value="Fecha Nacimiento: " />
-                                            <p:calendar id="fechaNacimiento" value="#{alumnoManBean.tmpAlu.nacimiento}" navigator="true"/>
+                                            <p:calendar id="fechaNacimiento" value="#{alumnoManBean.tmpAlu.nacimiento}" navigator="true" yearRange="c-40:c"/>
                                             <p:message for="fechaNacimiento" showDetail="false" showSummary="false" />
                                     
                                             <h:outputText value="Teléfono: "/>
@@ -72,7 +72,7 @@
                                             
                                             <h:outputText value="Ciudad: "/>
                                             <p:selectOneMenu id="ciudad" value="#{alumnoManBean.tmpAlu.idCiudad}" converter="convCiudad">
-                                                <f:selectItems value="#{datosTablasManBean.listaCiudades}" var="ciualta" itemLabel="#{ciualta.nombre}" />
+                                                <f:selectItems value="#{datosTablasManBean.listaCiudades}" var="ciualta" itemLabel="#{ciualta.nombre} - #{ciualta.idDepartamento.nombre}" />
                                             </p:selectOneMenu>
                                     
                                 </h:panelGrid>                                

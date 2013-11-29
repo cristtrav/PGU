@@ -1,0 +1,108 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+    <body>
+
+        <ui:composition template="./../plantillas/plantillaPrincipal.xhtml">
+
+            <ui:define name="tituloPagina">
+                PGU - Profesores
+            </ui:define>
+
+            <ui:define name="content">
+                <!-- Inicio Dialogos-->
+                
+                <!--Dialogo para carga de docentes-->
+                <p:dialog widgetVar="dlgAltaDocente" modal="true" appendTo="@(body)" header="Alta de Docentes">
+                    <h:form id="formAltaDocente">
+                        <p:messages id="msgAltaDocente" autoUpdate="false" closable="true" />
+                        <h:panelGrid columns="3">
+                            
+                            <h:outputText value="Nombres: "/>
+                            <p:inputText id="nombres" value="#{docenteManBean.tmpDocente.nombres}" required="true" />
+                            <p:message for="nombres" showDetail="false" showSummary="false" />
+                            
+                            <h:outputText value="Apellidos: " />
+                            <p:inputText id="apellidos" value="#{docenteManBean.tmpDocente.apellidos}" required="true" />
+                            <p:message for="apellidos" showDetail="false" showSummary="false" />
+                            
+                            <h:outputText value="Cédula: " />
+                            <p:inputText id="cedula" value="#{docenteManBean.tmpDocente.ci}" required="true" >
+                                <f:convertNumber integerOnly="true"/>
+                                <f:validateLongRange minimum="1" />
+                            </p:inputText>
+                            <p:message for="cedula" showDetail="false" showSummary="false"/>
+                            
+                            <h:outputText value="Fecha de Nacimiento: "/>
+                            <p:calendar id="nacimiento" value="#{docenteManBean.tmpDocente.nacimiento}" navigator="true" yearRange="c-40:c"/>
+                            <p:message for="nacimiento" showDetail="false" showSummary="false"/>
+                            
+                            <h:outputText value="Teléfono: "/>
+                            <p:inputText id="telefono" value="#{docenteManBean.tmpDocente.telefono}" />
+                            <p:message for="telefono" showDetail="false" showSummary="false"/>
+                            
+                            <h:outputText value="Celular: " />
+                            <p:inputText id="celular" value="#{docenteManBean.tmpDocente.celular}"/>
+                            <p:message for="celular" showDetail="false" showSummary="false" />
+                            
+                            <h:outputText value="Email: "/>
+                            <p:inputText id="email" value="#{docenteManBean.tmpDocente.correo}" />
+                            <p:message for="email" showDetail="false" showSummary="false" />
+                        </h:panelGrid>
+                        <p:separator />
+                        <h:panelGrid columns="3">
+                            <p:commandButton value="Agregar" actionListener="#{docenteManBean.guardarDocente()}" icon="ui-icon-plus" update="@form, :formDocente:tablaDocente" />
+                            <p:commandButton value="Limpiar" icon="ui-icon-trash" />
+                            <p:commandButton value="Cerrar" icon="ui-icon-closethick" type="button" onclick="dlgAltaDocente.hide();" />
+                        </h:panelGrid>
+                    </h:form>
+                </p:dialog>
+                <!-- Fin Dialogos -->
+                <p:layout>
+                    <p:layoutUnit position="east" size="210" maxSize="400" minSize="170" resizable="true">
+                        <p:accordionPanel>
+                            <p:tab title="Acciones">
+                                <h:form>
+                                    <p:commandButton value="Agregar" type="button" onclick="dlgAltaDocente.show();" icon="ui-icon-plus" style="width: 95%" />
+                                    <p:commandButton value="Eliminar" icon="ui-icon-trash" style="width: 95%" />
+                                    <p:separator />
+                                    <p:commandButton value="Mostrar todo" actionListener="#{docenteManBean.cargarDocentes()}" update=":formDocente:tablaDocente" style="width: 95%"/>
+                                    <p:commandButton value="Recargar" icon="ui-icon-refresh" actionListener="#{docenteManBean.recargarDocente()}" update=":formDocente:tablaDocente" style="width: 95%" />
+                                </h:form>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:layoutUnit>
+                    <p:layoutUnit position="center" style="border-style: hidden">
+                        <h:form id="formDocente">
+                            <!--Tabla principal donde se visuallizan los docentes -->
+                            <p:dataTable id="tablaDocente" value="#{docenteManBean.lstDocentes}" var="doc">
+                                <p:column headerText="Código">
+                                    <h:outputText value="#{doc.idDocente}"/>
+                                </p:column>
+                                <p:column headerText="Nombres">
+                                    <h:outputText value="#{doc.nombres}" />
+                                </p:column>
+                                <h:column headerClass="Apellidos">
+                                    <h:outputText value="#{doc.apellidos}" />
+                                </h:column>
+                                <p:column headerText="Cédula" >
+                                    <h:outputText value="#{doc.ci}">
+                                        <f:convertNumber pattern="###,###,###,###" />
+                                    </h:outputText>
+                                </p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+            </ui:define>
+
+        </ui:composition>
+
+    </body>
+</html>
