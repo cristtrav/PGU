@@ -125,4 +125,22 @@ public class DocenteManBean implements Serializable {
         this.tmpDocente=new Docente();
     }
     
+    public void confirmElim(){
+        if(this.selDocente.isEmpty()){
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Debe seleccionar por lo menos un elemento",""));
+        }else{
+            RequestContext.getCurrentInstance().execute("dlgConfElim.show()");
+        }
+    }
+    
+    public void eliminarDocentes(){
+        Iterator<Docente> it=this.selDocente.iterator();
+        while(it.hasNext()){
+            Docente tmpd=it.next();
+            this.lstDocentes.remove(tmpd);
+            this.docenteFacade.remove(tmpd);
+        }
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Se eliminaron correctamente los elementos",""));
+    }
+    
 }
