@@ -164,10 +164,13 @@ public class AlumnoManBean implements Serializable {
                 this.selAlumnos.remove(itsel.next());
             }
             this.cargarAlumnos();
-            if(error){
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"No pudieron eliminarse todos los elementos",""));
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Se eliminaron correctamente los elementos",""));
+            if(error)
+            {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"No pudieron eliminarse todos los elementos",""));
+            }
+            else
+            {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Se eliminaron correctamente los elementos",""));
             }
             //RequestContext.getCurrentInstance().update("formAlumnos");
     }
@@ -186,9 +189,11 @@ public class AlumnoManBean implements Serializable {
         try{
             this.alumnoFacade.edit(this.selSimpAlu);
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Se modificó correctamente",""));
-        }catch(Exception exc){
-            AlumnoManBean.LOG.log(Level.SEVERE, "Error al editar alumno", exc);
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error al modificar alumno: "+exc.getLocalizedMessage(),""));
+        }
+        catch(Exception exc)
+        {
+        AlumnoManBean.LOG.log(Level.SEVERE, "Error al editar alumno", exc);
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR,"Error al modificar alumno: "+exc.getLocalizedMessage(),""));
         }
         
         //System.out.println("El objeto es: "+e.getObject().getClass().getName());
@@ -200,8 +205,10 @@ public class AlumnoManBean implements Serializable {
                 this.selSimpAlu=this.selAlumnos.get(0);
                 RequestContext.getCurrentInstance().update("formModifAlu");
                 RequestContext.getCurrentInstance().execute("dlgViewAlumno.show()");
-            }else{
-                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Seleccione solo un elemento para editar",""));
+            }
+            else
+            {
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Seleccione solo un elemento para editar",""));
             }
         }
     }

@@ -33,7 +33,10 @@
                             </p:tab>
                         </p:accordionPanel>
                     </p:layoutUnit>
+                    
+                    
                     <p:layoutUnit position="center" style="border-style: hidden" header="Alumnos" >
+                        
                         <!--Inicio Dialogos-->
                         <p:dialog widgetVar="dlgAgreAlumno" modal="true" header="Agregar alumnos" appendTo="@(body)" position="center center">
                             <h:form id="formAltaAlumno">
@@ -79,7 +82,10 @@
                                 <p:commandButton value="Agregar" actionListener="#{alumnoManBean.guardarAlumno()}" icon="ui-icon-plus" update="@form" />
                             </h:form>
                         </p:dialog>
+                        <!-- fin dialogo agregar-->
                         
+                        
+                        <!-- eliminar-->
                         <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" header="Eliminar Alumnos" modal="true">
                             <h:form>
                                 <h:outputText value="¿Desea eliminar los elementos seleccionados?" />
@@ -90,6 +96,8 @@
                             </h:form>
                         </p:dialog>
                         
+                        
+                        <!-- modificar Alumnos-->
                         <p:dialog widgetVar="dlgViewAlumno" header="Detalles de alumno" modal="true" appendTo="@(body)">
                             <h:form id="formModifAlu">
                                 <p:messages id="msgModifAlu"  autoUpdate="false" closable="true" />
@@ -114,6 +122,7 @@
                                     </p:selectOneMenu>
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
+                                   <!--Boton guardar-->
                                     <p:commandButton value="Guardar" title="Guarda los cambios efectuados" actionListener="#{alumnoManBean.modifAlumno()}" update="formModifAlu"/>
                                     <p:commandButton value="Cerrar" title="Cierra el dialogo" type="button" onclick="dlgViewAlumno.hide();" />
                                 </h:panelGrid>

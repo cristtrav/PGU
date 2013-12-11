@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">       
+    <body>
+        <ui:composition template="./../plantillas/plantillaPrincipal.xhtml"> 
+            <ui:define name="tituloPagina">PGU - Facultad</ui:define>
+            <ui:define name="content">
+                <p:layout>
+                    
+                    <p:layoutUnit position="east" size="210" resizable="true" minSize="170" maxSize="400">
+                        <p:accordionPanel>
+                            <p:tab title="Acciones">
+                                <h:form>                                                                        
+                                    <h:panelGrid columns="1" style="width: 98%">                                       
+                                        <p:commandButton icon="ui-icon-plus" value="Agregar" oncomplete="dlgAgreFacultad.show();" actionListener="#{FacultadManBean.limpiarformAlta()}" update=":formAltaFacultad" style="width: 100%"/>
+                                        <p:commandButton icon="ui-ucin-trash" value="Eliminar" actionListener="#{FacultadManBean.confElim()}" update=":formFacultad:mens" style="width: 100%" />
+                                        
+                                        <p:separator/>
+                                        
+                                        <p:commandButton icon="ui-icon-plus" value="Mostrar todo" title="Mostrar todos los Registros" actionListener="#{FacultadManBean.cargarFacultad()}" partialSubmit="true" process="@this" update=":formFacultad:tablaFacultad" style="width: 100%"/>
+                                        <p:commandButton icon="ui-icon-refresh" value="Recargar" title="Recargar Tabla" actionListener="#{FacultadManBean.refrescarTabla()}" update=":formFacultad:tablaFacultad" style="width: 100%" />
+                                    </h:panelGrid>                                                                
+                                </h:form>                           
+                            </p:tab>                        
+                        </p:accordionPanel>                     
+                    </p:layoutUnit>
+                    
+                    
+                    <p:layoutUnit position="center" style="border-style: hidden" header="Facultad">
+                        
+                        
+                        <!-- Inicio dialogo Cargar Facultad-->
+                        <p:dialog widgetVar="dlgAgreFacultad" modal="true" header="Agregar Facultad" appendTo="@(body)" position="center center">
+                            <h:form id="formAltaFacultad">
+                                <p:messages id="msgAltaFacultad" autoUpdate="false" closable="true" />
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Descripcion:  "/>
+                                    <p:inputText id="descripcion" value="#{FacultadManBean.temporalFacultad.descripcion}" required="true"/>
+                                    <p:message for="descripcion" showDetail="false" showSummary="false" />
+                                </h:panelGrid>
+                                <p:commandButton value="Agregar" actionListener="#{FacultadManBean.guardarFAcultad()}" icon="ui-icon-plus" update="@form"/>
+                            </h:form>
+                        </p:dialog>
+                        <!--fin dialogo Agregar Facultad -->
+                        
+                        
+                        <!-- inicio dialogo eliminar Facultad-->
+                        <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" header="Eliminar Facultad" modal="true">
+                            <h:form>
+                                <h:outputText value="Desea Eliminar los Elementos Seleccionados" />
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Aceptar" actionListener="#{FacultadManBean.eliminarfacu()}" update=":formFacultad" oncomplete="dlgConfirmElim.hide();"/>
+                                    <p:commandButton value="Cancelar" type="button" onclick="dlgConfirmElim.hide();" />
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                        <!--Fin del dialogo eliminar-->
+                        
+                        
+                        <!--Inicio dialogo Modificar-->
+                        <p:dialog widgetVar="dlgviewFacu" header="Detalles de la FAcultad" modal="true" appendTo="@(body)">
+                            <h:form id="formModifiFacu">
+                                <p:messages id="msgModifiFacu" autoUpdate="false" closable="true"/>
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Codigo: "/>
+                                    <p:inputText value="#{FacultadManBean.selSimpFacu.idFacultad}" readonly="true"/>
+                                    <h:outputText value="Descripcion: "/>
+                                    <p:inputText value="#{FacultadManBean.selSimpFacu.descripcion}" required="true"/>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Guardar" title="Guardar cambios efectuados" actionListener="#{FacultadManBean.modifFacu()}" update="formModifiFacu"/>
+                                    <p:commandButton value="Cerrar" title="Cierra el dialogo" type="button" onclick="dlgviewFacu.hide();"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                        <!--fin dialogos-->
+                        <h:form id="formFacultad">
+                            <p:growl id="mens" autoUpdate="false" sticky="false"/>
+                            <p:dataTable id="tablaFacultad" rowKey="#{facu.idFacultad}" value="#{FacultadManBean.listaFacultad}" var="facu" selection="#{FacultadManBean.selectFacu}" stickyHeader="true" style="margin-top: -3px" >
+                                
+                                
+                                <p:ajax event="rowSelect" />
+                                <p:ajax event="rowUnselect" />
+                                <p:ajax event="toggleSelect" />
+                                <p:ajax event="rowDblselect" listener="#{FacultadManBean.llamardlgdetalles()}" update=":formFacultad:mens" />
+                                
+                                <p:column selectionMode="multiple" style="width: 20px " />
+                                
+                                <p:column headerText="Codigo" style="width: 45px " >#{facu.idFacultad}</p:column>
+                                
+                                <p:column headerText="Descripcion">#{facu.descripcion}</p:column>
+                            </p:dataTable>
+                        </h:form>
+                    </p:layoutUnit>
+                   </p:layout>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>
