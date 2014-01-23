@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui" 
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    
+    <body>
+        <ui:composition template="./../plantillas/plantillaPrincipal.xhtml">
+            <ui:define name="tituloPagina">
+                PGU - Examenes
+            </ui:define> 
+            <ui:define name="content">
+                <p:layout>
+                    <p:layoutUnit position="east" size="210" resizable="true" minSize="170" maxSize="400">
+                        <p:accordionPanel>  
+                            <p:tab title="Acciones">
+                                <h:form>
+                                    <h:panelGrid columns="1" style="width: 98%">
+                                       <p:commandButton icon="ui-icon-plus" value="Agregar" oncomplete="dlgAgreExamenes.show();" actionListener="#{Examenes.limpiarFormAlta()}"  style="width: 100%" />
+                                       <p:commandButton icon="ui-icon-trash" value="Eliminar" actionListener="#{Examenes.confirDelt()}" update=":formExamen:mens" style="width: 100%"/>
+                                       <p:separator/>
+                                       <p:commandButton value="Mostrar todo" title="MOstrar todos los contenidos" actionListener="#{Examenes.cargarExmen()}" partialSubmit="true" process="@this" update=":formExamen:tablaExa" style="width: 100%"/>
+                                       <p:commandButton icon="ui-icon-refresh" value="Recargar" title="Recargar Tabla" actionListener="#{Examenes.refrescarTablas()}" update=":formExamen:tablaExa" style="width: 100%"/>
+                                    </h:panelGrid>
+                                </h:form>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:layoutUnit>
+                    
+                    <p:layoutUnit position="center" style="border-style: hidden" >
+                        <h:form id="formExamen">
+                            <p:growl id="mens" autoUpdate="false" sticky="false"/>
+                            <p:dataTable id="tablaExa" widgetVar="examentabla" emptyMessage="Examen no encontrado" filteredValue="#{Examenes.listaexa}" rowKey="#{exa.examenPK}" value="#{Examenes.listaexa}" var="exa"  selection="#{Examenes.selectexa}" stickyHeader="true" style="margin-top: -3px">
+                                <f:facet name="header">
+                                   <p:outputPanel>
+                                                <h:outputText value="Busqueda global"/>
+                                                <p:inputText id="busqueda" onkeyup="examentabla.filter()" style="width: 150px"/>
+                                            </p:outputPanel>
+                                </f:facet>
+                                    
+                                    <p:ajax event="rowSelect"  />
+                                    <p:ajax event="rowUnselect" />
+                                    <p:ajax event="rowSelectCheckbox" />
+                                    <p:ajax event="rowUnselectCheckbox" />
+                                    <p:ajax event="toggleSelect" />
+                                    <p:ajax event="rowDblselect" listener="#{Examenes.llamardlgDEtalles()}" update=":formExamen:mens"/>
+                                    
+                                    <p:column selectionMode="multiple" style="width: 20px" />
+
+                                    
+                                    <p:column >
+                                        <f:facet name="header">Alumnos</f:facet>
+                                        <h:outputText value="#{exa.alumno}"/>
+                                    </p:column>
+                                    <p:column headerText="Calificacion" >
+                                        <h:outputText value="#{exa.calificacion}"/>
+                                    </p:column>
+                                    <p:column headerText="Materia" >
+                                        <h:outputText value="#{exa.materia}"/>
+                                    </p:column>
+                                    <p:column id="tablaExa" filterBy="semestre" headerText="Semestre" footerText="exact" filterOptions="#{Examenes.semestreoption}" filterMatchMode="exact">
+                                        <h:outputText value="#{exa.semestre}"/>
+                                    </p:column> 
+                                    <f:facet name="footer">
+                                        -----------
+                                    </f:facet>
+                            </p:dataTable>
+                        </h:form>
+                    </p:layoutUnit>
+                </p:layout>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

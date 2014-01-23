@@ -39,6 +39,7 @@ public class FacultadManBean implements Serializable {
     private SesUtils sesUtils;
     @EJB
     private FacultadFacade facultadFacade;
+    
     private List<Facultad> listaFacultad;
     private List<Facultad> selectFacu;
     private Map<String, Facultad> cambiospendientes= new HashMap();

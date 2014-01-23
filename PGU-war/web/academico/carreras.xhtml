@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">   
+    <body>
+        <ui:composition template="./../plantillas/plantillaPrincipal.xhtml">
+            
+            <ui:define name="tituloPagina">
+            PGU-Carreras
+            </ui:define> 
+            
+            <ui:define name="content">
+                <p:layout>
+                    <p:layoutUnit position="east" size="210" resizable="true" minSize="170" maxSize="400">
+                        <p:accordionPanel>
+                            <p:tab title="Acciones">
+                                <h:form>
+                                    <p:panelGrid columns="1" style="width: 98%">
+                                        <p:commandButton icon="ui-icon-plus" value="Agregar" oncomplete="dlgAgreCarrera.show();" actionListener="#{CarreraManBean.limpiarformAlta()}" style="width: 100%"/>
+                                        <p:commandButton icon="ui-icon-trash" value="Eliminar" actionListener="#{CarreraManBean.confElim()}" update=":formCarrera:mens" style="width: 100%" />
+                                        <p:separator/>
+                                        <p:commandButton value="MOstrar Todo" title="Mostrar todos los registros" actionListener="#{CarreraManBean.cargaCarrera()}" partialSubmit="true" process="@this" update=":formCarrera:tablaCarrera" style="width: 100%"/>
+                                        <p:commandButton value="Recargar" title="Recargar Tabla" icon="ui-icon-refresh" actionListener="#{CarreraManBean.refrescartabla()}" update=":formCarrera:tablaCarrera" style="width: 100%" />
+                                    </p:panelGrid>
+                                </h:form>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:layoutUnit>
+                    
+                    <p:layoutUnit position="center" style="border-style: hidden" header="Carreras">
+                       
+                        <p:dialog widgetVar="dlgAgreCarrera" modal="true" header="Agregar Carreras" appendTo="@(body)" position="center cener" > 
+                        <h:form id="formAltaCarrera">
+                            <p:messages id="msgAltaCarrera" autoUpdate="false" closable="true"/>
+                            <h:panelGrid columns="3">
+                                <h:outputText value="Descripcion:    "/>
+                                <p:inputText id="Descripcion" value="#{CarreraManBean.tmpcarrera.descripcion}" required="true"/>
+                                <p:message for="Descripcion" showDetail="false" showSummary="false"/>
+                                <h:outputText value="Facultad:   " />
+                                <p:selectOneMenu id="Ciudad" value="#{CarreraManBean.tmpcarrera.idFacultad}" converter="ConvFacultad" >
+                                    <f:selectItems value="#{datosTablasManBean.facultadFacade}" var="falta" itemLabel="#{falta.descripcion}"/>
+                                </p:selectOneMenu>                                
+                            </h:panelGrid>
+                            <p:commandButton value="Guardar" icon="ui-icon-plus" actionListener="#{CarreraManBean.guardarCarrera()}" update="@form" />
+                        </h:form>
+                        </p:dialog>
+                        
+                        <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" header="Eliminar Carreras" modal="true">
+                            <h:form>
+                                <h:outputText value="Desea eliminar los componentes seleccionados??" />
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Aceptar" actionListener="#{CarreraManBean.eliminarCarrera()}" update=":formCarrera" oncomplete="dlgConfirmElim.hide();"/>
+                                    <p:commandButton value="Cancelar" type="button" onclick="dlgConfirmElim.hide();"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                        
+                        <p:dialog widgetVar="dlgviewCarrera" header="Detalles de Carrera" modal="true" appendTo="@(body)">
+                            <h:form id="formModicarrera">
+                                <p:messages id="msgModicarrera"  autoUpdate="false" closable="true" />
+                                <h:panelGrid columns="2">
+                                    <h:outputText value="Código: " />
+                                    <p:inputText value="#{CarreraManBean.selSimpcarrera.idCarrera}" readonly="true"/>
+                                    <h:outputText value="Descripcion: "/>
+                                    <p:inputText value="#{CarreraManBean.selSimpcarrera.descripcion}" required="true" />
+                                    <h:outputText value="Carrera: " />
+                                    <p:selectOneMenu value="#{CarreraManBean.selSimpcarrera.idFacultad}" converter="ConvFacultad" >
+                                        <f:selectItems value="#{datosTablasManBean.facultadFacade}" var="facu" itemLabel="#{facu.descripcion} - #{facu.idFacultad}"/>
+                                    </p:selectOneMenu>
+                                </h:panelGrid>
+                                <h:panelGrid columns="2">
+                                   <!--Boton guardar-->
+                                   <p:commandButton value="Guardar" title="Guarda los cambios efectuados" actionListener="#{CarreraManBean.modiCarr()}" update="formModicarrera"/>
+                                    <p:commandButton value="Cerrar" title="Cierra el dialogo" type="button" onclick="dlgviewCarrera.hide();" />
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                        
+                        <h:form id="formCarrera">
+                            <p:growl id="mens" autoUpdate="false" sticky="false" />
+                            
+                               
+                                    <p:dataTable id="tablaCarrera" rowKey="#{item.idCarrera}" value="#{CarreraManBean.lstcarreras}" var="item" selection="#{CarreraManBean.selectcarreras}" stickyHeader="true" style="margin-top: -3px ">
+                                        
+                                        <p:ajax event="rowSelect"  />
+                                        <p:ajax event="rowUnselect" />
+                                        <p:ajax event="rowSelectCheckbox" />
+                                        <p:ajax event="rowUnselectCheckbox" />
+                                        <p:ajax event="toggleSelect" />
+                                        <p:ajax event="rowDblselect" listener="#{CarreraManBean.llamardlgDetalle()}" update=":formCarrera:mens" />
+                                        <p:column selectionMode="multiple" style="width: 20px"/>
+                                        <p:column headerText="Cod: " style="width: 45px">
+                                            #{item.idCarrera}
+                                        </p:column>
+                                        <p:column headerText="Descripcion:  ">
+                                        #{item.descripcion}
+                                        </p:column>
+                                         
+                                        <p:column headerText="Facultad: ">
+                                            #{item.idFacultad.descripcion}
+                                        </p:column>
+                                        
+                                    </p:dataTable>
+                                </h:form>
+                        
+                    </p:layoutUnit>
+                      <p:layoutUnit position="south" size="120" header="Filtro" collapsible="true" collapsed="true">
+                        
+                    </p:layoutUnit>
+                </p:layout>
+            </ui:define>
+        </ui:composition>
+    </body>
+</html>

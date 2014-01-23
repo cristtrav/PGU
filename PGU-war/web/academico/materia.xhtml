@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:f="http://xmlns.jcp.org/jsf/core" 
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <body>
+        <ui:composition template="./../plantillas/plantillaPrincipal.xhtml">
+            <ui:define name="tituloPagina">
+                PGU - Materias
+            </ui:define>
+            <ui:define name="content">
+                <p:layout>
+                    <p:layoutUnit position="east" size="210" resizable="true" minSize="170" maxSize="400">
+                        <p:accordionPanel>
+                            <p:tab title="Acciones">
+                                <h:form>
+                                    <h:panelGrid columns="1" style="width: 98%">
+                                        <p:commandButton icon="ui-icon-plus" value="Agregar"  oncomplete="dlgAgreMateria.show();" actionListener="#{MateriaManBean.limpiarformAlta()}" update=":formAltaMateria" style="width: 100%"/>
+                                        <p:commandButton value="Eliminar" icon="ui-icon-trash" actionListener="#{MateriaManBean.confirmarelims()}" update=":forMateria:mens" style="width: 100%"/>
+                                        <p:separator/>
+                                        <p:commandButton value="Mostrar todo" title="Mostrar Todos los registros" actionListener="#{MateriaManBean.cargarMaterias()}" partialSubmit="true" update=":forMateria:tablaMateria" style="width: 100%"/>
+                                        <p:commandButton value="Recargar" title="Recargar Tabla" icon="ui-icon-refresh" actionListener="#{MateriaManBean.refrescartabla()}" update=":forMateria:tablaMateria" style="width: 100%"/>
+                                    </h:panelGrid>
+                                </h:form>
+                            </p:tab>
+                        </p:accordionPanel>
+                    </p:layoutUnit>
+                    
+                    <p:layoutUnit position="center" style="border-style: hidden" header="Materias">
+                        
+                        
+                        <p:dialog widgetVar="dlgAgreMateria" modal="true" header="Agregar Materias" appendTo="@(body)" position="center center">
+                            <h:form id="formAltaMateria">
+                                <p:messages id="msgAltaMateria" autoUpdate="false" closable="true"/>
+                                <h:panelGrid columns="3">
+                                    <h:outputText value="nombres:  "/>
+                                    <p:inputText id="nombres" value="#{MateriaManBean.temporalMateria.nombre}" required="true"/>
+                                    <p:message for="nombres" showDetail="false" showSummary="false" />
+                                    <h:outputText value="Carreras: "/>
+                                    <p:selectOneMenu id="idcarreras" value="#{MateriaManBean.temporalMateria.idCarrera}" converter="ConvCarrera">
+                                        <f:selectItems value="#{datosTablasManBean.carreras}" var="carAlta" itemLabel="#{carAlta.descripcion}"/>
+                                    </p:selectOneMenu>
+                                    <h:outputText value="semestres:  "/>
+                                    <p:inputText id="semestres" value="#{MateriaManBean.temporalMateria.semestre}" required="true"/>
+                                    <p:message for="semestres" showDetail="false" showSummary="false"/>
+                                </h:panelGrid>
+                                <p:commandButton value="Guardar" actionListener="#{MateriaManBean.guardadMaterias()}" icon="ui-icon-plus" update="@form" />
+                            </h:form>
+                         </p:dialog>
+                        
+                        
+                        <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" header="Eliminar Materias" modal='true'>
+                            <h:form>
+                                <h:outputText value="Desea Eliminar los elementos seleccionados"/>
+                                <h:panelGrid columns="2">
+                                    <p:commandButton value="Aceptar" actionListener="#{MateriaManBean.eliminarMateria()}" update=":forMateria" oncomplete="dlgConfirmElim.hide();"/>
+                                    <p:commandButton value="Cancelar" type="button" onclick="dlgConfirmElim.hide();"/>
+                                </h:panelGrid>
+                            </h:form>
+                        </p:dialog>
+                   
+                    <p:dialog widgetVar="dlgViewMateria" header="Detalles del Alumno" modal="true" appendTo="@(body)">
+                        <h:form id="forModifiMateria">
+                            <p:messages id="msgModifMateria" autoUpdate="false" closable="true" />
+                            <h:panelGrid columns="2">
+                                <h:outputText value="Codigo:   "/>
+                                <p:inputText value="#{MateriaManBean.selSimpMateria.idMateria}" readonly="true"/>
+                                <h:outputText value="Materia: "/>
+                                <p:inputText value="#{MateriaManBean.selSimpMateria.nombre}" readonly="true"/>
+                                <h:outputText value="Carreras: "/>
+                                <p:selectOneMenu value="#{MateriaManBean.selSimpMateria.idCarrera}" converter="ConvCarrera">
+                                    <f:selectItems value="#{datosTablasManBean.carreras}" var="mate" itemLabel="#{mate.descripcion} - #{mate.idCarrera}"/>
+                                </p:selectOneMenu>
+                                <h:outputText value="Semestres:  "/>
+                                <p:inputText value="#{MateriaManBean.selSimpMateria.semestre}" readonly="true"/>
+                            </h:panelGrid>
+                            <h:panelGrid columns="2">
+                                <p:commandButton value="Guardar" title="Guarda los cambio efectuados" actionListener="#{MateriaManBean.modifimateria()}" update="forModifiMateria"/>
+                                <p:commandButton value="Cerrar" title="Cierra el dialogo" type="button" onclick="dlgViewMateria.hide();"/>
+                            </h:panelGrid>
+                        </h:form>
+                    </p:dialog>
+                    <h:form id="forMateria">
+                        <p:growl id="mens" autoUpdate="false" sticky="false"/>
+                        <p:dataTable id="tablaMateria" value="#{MateriaManBean.listaMateria}" selection="#{MateriaManBean.selectMateria}" var="mat" rowKey="#{mat.idMateria}" stickyHeader="true" style="margin-top: -3px ">
+                            <p:ajax event="rowSelect" />
+                            <p:ajax event="rowUnselect" />
+                            <p:ajax event="rowSelectCheckbox" />
+                            <p:ajax event="rowUnselectCheckbox" />
+                            <p:ajax event="toggleSelect" />
+                            <p:ajax event="rowDblselect" listener="#{MateriaManBean.llamardlgDetalle()}" update=":forMateria:mens"/>
+                            <p:column selectionMode="multiple" style="width: 20px"/>
+                            <p:column headerText="cod" style="width: 45px">
+                            #{mat.idMateria}
+                            </p:column>
+                            <p:column headerText="Materias" style="width: 45px">
+                                #{mat.nombre}
+                            </p:column>
+                            <p:column headerText="Carreras: " style="width: 45px">
+                                #{mat.idCarrera.descripcion}
+                            </p:column>
+                            <p:column headerText="Semestres: " style="width: 45px">
+                                #{mat.semestre}
+                            </p:column>
+                        </p:dataTable>
+                    </h:form>
+                </p:layoutUnit>
+                    
+                    <p:layoutUnit position="south" size="120" header="Filtro" collapsible="true" collapsed="true">
+                        
+                    </p:layoutUnit>
+                    
+                </p:layout>
+            </ui:define>
+            
+        </ui:composition>
+    </body>
+</html>

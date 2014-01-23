@@ -4,11 +4,8 @@
  */
 package com.pgu.convertidores;
 
-import com.pgu.entidades.Ciudad;
-import com.pgu.sesbeans.AlumnoFacade;
 import com.pgu.sesbeans.CiudadFacade;
 import com.pgu.util.StringEntityUtil;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.inject.Named;

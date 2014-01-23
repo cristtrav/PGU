@@ -5,7 +5,7 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+      xmlns:c="http://xmlns.jcp.org/jsp/jstl/core"> 
 
     <body>
 
@@ -38,7 +38,7 @@
                     <p:layoutUnit position="center" style="border-style: hidden" header="Alumnos" >
                         
                         <!--Inicio Dialogos-->
-                        <p:dialog widgetVar="dlgAgreAlumno" modal="true" header="Agregar alumnos" appendTo="@(body)" position="center center">
+                        <p:dialog widgetVar="dlgAgreAlumno" showEffect="puff" modal="true" header="Agregar alumnos" appendTo="@(body)" position="center center">
                             <h:form id="formAltaAlumno">
                                 <p:messages id="msgAltaAlumno" autoUpdate="false"  closable="true"/>
                                 <h:panelGrid columns="3">
@@ -86,7 +86,7 @@
                         
                         
                         <!-- eliminar-->
-                        <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" header="Eliminar Alumnos" modal="true">
+                        <p:dialog widgetVar="dlgConfirmElim" appendTo="@(body)" showEffect="explode" header="Eliminar Alumnos" modal="true">
                             <h:form>
                                 <h:outputText value="¿Desea eliminar los elementos seleccionados?" />
                                 <h:panelGrid columns="2">
@@ -123,7 +123,7 @@
                                 </h:panelGrid>
                                 <h:panelGrid columns="2">
                                    <!--Boton guardar-->
-                                    <p:commandButton value="Guardar" title="Guarda los cambios efectuados" actionListener="#{alumnoManBean.modifAlumno()}" update="formModifAlu"/>
+                                    <p:commandButton value="Guardar" title="Guarda los cambios efectuados" actionListener="#{alumnoManBean.modifAlumno()}" update=":formModifAlu"/>
                                     <p:commandButton value="Cerrar" title="Cierra el dialogo" type="button" onclick="dlgViewAlumno.hide();" />
                                 </h:panelGrid>
                             </h:form>
@@ -133,37 +133,37 @@
                         
                         <h:form id="formAlumnos">
                             <p:growl id="mens" autoUpdate="false" sticky="false" />
-                            <p:dataTable id="tablaAlumnos" rowKey="#{alu.idAlumno}" value="#{alumnoManBean.lstAlumnos}" var="alu" selection="#{alumnoManBean.selAlumnos}" stickyHeader="true" style="margin-top: -3px" >
-                                
-                                <p:ajax event="rowSelect"  />
-                                <p:ajax event="rowUnselect" />
-                                <p:ajax event="rowSelectCheckbox" />
-                                <p:ajax event="rowUnselectCheckbox" />
-                                <p:ajax event="toggleSelect" />
-                                <p:ajax event="rowDblselect" listener="#{alumnoManBean.llamarDlgDetalles()}" update=":formAlumnos:mens" />
-                                
-                                
-                                    <p:column selectionMode="multiple" style="width: 20px" />
-                                    
-                                    <p:column headerText="Cód" style="width: 45px">
-                                        #{alu.idAlumno}
-                                    </p:column>
-                                    <p:column headerText="Nombres">
-                                        <h:outputText value="#{alu.nombres}" />
-                                    </p:column>
-                                    
-                                    <p:column headerText="Apellidos">
-                                        <h:outputText value="#{alu.apellidos}"/>
-                                    </p:column>
-                                    
-                                    <p:column headerText="Cédula">
-                                        <h:outputText value="#{alu.ci}">
-                                            <f:convertNumber pattern="###,###,###,###" />
-                                        </h:outputText>
-                                    </p:column>
-                                    
-                                </p:dataTable>
-                            </h:form>
+                                <p:dataTable id="tablaAlumnos" rowKey="#{alu.idAlumno}" value="#{alumnoManBean.lstAlumnos}" var="alu" selection="#{alumnoManBean.selAlumnos}" stickyHeader="true" style="margin-top: -3px" >
+
+                                    <p:ajax event="rowSelect"  />
+                                    <p:ajax event="rowUnselect" />
+                                    <p:ajax event="rowSelectCheckbox" />
+                                    <p:ajax event="rowUnselectCheckbox" />
+                                    <p:ajax event="toggleSelect" />
+                                        <p:ajax event="rowDblselect" listener="#{alumnoManBean.llamarDlgDetalles()}" update=":formAlumnos:mens" />
+
+
+                                            <p:column selectionMode="multiple" style="width: 20px" />
+
+                                            <p:column headerText="Cód" style="width: 45px">
+                                                #{alu.idAlumno}
+                                            </p:column>
+                                            <p:column headerText="Nombres">
+                                                <h:outputText value="#{alu.nombres}" />
+                                            </p:column>
+
+                                            <p:column headerText="Apellidos">
+                                                <h:outputText value="#{alu.apellidos}"/>
+                                            </p:column>
+
+                                            <p:column headerText="Cédula">
+                                                <h:outputText value="#{alu.ci}">
+                                                    <f:convertNumber pattern="###,###,###,###" />
+                                                </h:outputText>
+                                            </p:column>
+
+                                        </p:dataTable>
+                                    </h:form>
                     </p:layoutUnit>
                     <p:layoutUnit position="south" size="120" header="Filtro" collapsible="true" collapsed="true">
                         

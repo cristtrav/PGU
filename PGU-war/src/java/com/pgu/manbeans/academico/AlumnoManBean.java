@@ -166,14 +166,12 @@ public class AlumnoManBean implements Serializable {
             this.cargarAlumnos();
             if(error)
             {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"No pudieron eliminarse todos los elementos",""));
-            }
-            else
-            {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Se eliminaron correctamente los elementos",""));
-            }
-            //RequestContext.getCurrentInstance().update("formAlumnos");
-    }
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"No pudieron eliminarse todos los elementos",""));
+                }else{
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO,"Se eliminaron correctamente los elementos",""));
+                }
+                //RequestContext.getCurrentInstance().update("formAlumnos");
+        }
     
     public void confElim(){
         System.out.println("conelim method");
@@ -201,16 +199,16 @@ public class AlumnoManBean implements Serializable {
     
     public void llamarDlgDetalles(){
         if(this.selAlumnos!=null){
-            if(this.selAlumnos.size()==1){
-                this.selSimpAlu=this.selAlumnos.get(0);
-                RequestContext.getCurrentInstance().update("formModifAlu");
-                RequestContext.getCurrentInstance().execute("dlgViewAlumno.show()");
-            }
-            else
-            {
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Seleccione solo un elemento para editar",""));
-            }
+        if(this.selAlumnos.size()==1){
+            this.selSimpAlu=this.selAlumnos.get(0);
+            RequestContext.getCurrentInstance().update("formModifAlu");
+            RequestContext.getCurrentInstance().execute("dlgViewAlumno.show()");
         }
+        else
+        {
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN,"Seleccione solo un elemento para editar",""));
+        }
+    }
     }
     
     public void refrescarTabla(){
